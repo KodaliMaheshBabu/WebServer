@@ -3,48 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bodybuilding</title>
+    <title>Facebook-like Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
+            background-color: #f0f2f5;
+            margin: 0;
             padding: 0;
-            background-color: #f2f2f2;
+        }
+        .header {
+            background-color: #3b5998;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .navbar {
+            background-color: #3b5998;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
         }
         .container {
             max-width: 800px;
-            margin: auto;
+            margin: 20px auto;
             background-color: #fff;
-            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
         }
-        h1 {
-            text-align: center;
-            color: #333;
+        .profile {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
         }
-        p {
-            margin-bottom: 20px;
+        .profile img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
         }
-        img {
-            display: block;
+        .profile h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .post {
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .post p {
+            margin: 10px 0;
+        }
+        .post img {
             max-width: 100%;
             height: auto;
-            margin: 20px auto;
-            border-radius: 8px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
+<div class="header">
+    Facebook-like Page
+</div>
+
+<div class="navbar">
+    <a href="#">Home</a>
+    <a href="#">Profile</a>
+    <a href="#">Friends</a>
+    <a href="#">Messages</a>
+    <a href="#">Notifications</a>
+</div>
+
 <div class="container">
-    <h1>Bodybuilding</h1>
-    <p>Bodybuilding is the use of progressive resistance exercise to control and develop one's musculature for aesthetic purposes. An individual who engages in this activity is referred to as a bodybuilder.</p>
-    <p>Common goals of bodybuilders include building muscle mass, achieving a lean physique, and improving overall strength and endurance. Bodybuilding involves a combination of weightlifting, nutrition, and often supplementation.</p>
-    <img src="https://example.com/bodybuilding-image.jpg" alt="Bodybuilding Image">
-    <p>For more information and resources on bodybuilding, you can visit reputable fitness and bodybuilding websites or consult with fitness professionals.</p>
+    <div class="profile">
+        <img src="https://via.placeholder.com/80" alt="Profile Picture">
+        <div>
+            <h2>John Doe</h2>
+            <p>Software Engineer at Example Company</p>
+        </div>
+    </div>
+
+    <div class="post">
+        <p><strong>John Doe</strong> posted:</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis libero ac ex interdum, sed eleifend orci rutrum.</p>
+        <img src="https://via.placeholder.com/600x400" alt="Post Image">
+    </div>
+
+    <div class="post">
+        <p><strong>Jane Smith</strong> shared:</p>
+        <p>Check out this cool article: <a href="#">Example Article Title</a></p>
+    </div>
 </div>
 
 </body>
