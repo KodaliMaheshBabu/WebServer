@@ -3,164 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Game</title>
+    <title>Mario Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            overflow: hidden; /* Hide overflow to prevent scrolling */
+            background-color: #70c5ce;
             margin: 0;
             padding: 0;
         }
-        .memory-game {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            padding: 20px;
+        #gameContainer {
+            width: 800px;
+            height: 400px;
+            background-color: #d9f2f6;
+            border: 2px solid #3797a4;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
         }
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 100px);
-            grid-gap: 10px;
-            margin-top: 20px;
+        #player {
+            width: 50px;
+            height: 80px;
+            background-color: #f2d94e;
+            position: absolute;
+            bottom: 0;
+            left: 50px;
+            transition: bottom 0.3s;
         }
-        .memory-card {
-            width: 100px;
-            height: 100px;
-            background-color: #2ecc71;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            color: #fff;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
-        }
-        .memory-card.active,
-        .memory-card.matched {
-            background-color: #f39c12;
+        .coin {
+            width: 30px;
+            height: 30px;
+            background-color: gold;
+            position: absolute;
+            bottom: 80px; /* Position above the ground */
+            transition: left 2s linear, bottom 1s ease-out; /* Smooth animation */
         }
     </style>
 </head>
 <body>
 
-<div class="memory-game">
-    <h1>Memory Game</h1>
-    <div class="memory-grid" id="memoryGrid">
-        <!-- Memory cards will be dynamically generated here -->
-    </div>
-    <button onclick="startGame()">Start Game</button>
+<div id="gameContainer">
+    <div id="player"></div>
+    <!-- Coins will be dynamically generated here -->
 </div>
 
 <script>
-    const cards = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H'];
-    let flippedCards = [];
-    let matchedCards = [];
-    let firstCard, secondCard;
-    let lockBoard = false;
+    const player = document.getElementById('player');
+    const gameContainer = document.getElementById('gameContainer');
+    let score = 0;
 
-    function startGame() {
-        resetGame();
-        shuffle(cards);
-        createMemoryGrid();
-    }
+    function createCoin() {
+        const coin = document.createElement('div');
+        coin.classList.add('coin');
+        coin.style.left = `${Math.floor(Math.random() * (gameContainer.offsetWidth - 30))}px`;
+        gameContainer.appendChild(coin);
 
-    function resetGame() {
-        flippedCards = [];
-        matchedCards = [];
-        firstCard = null;
-        secondCard = null;
-        lockBoard = false;
-        document.getElementById('memoryGrid').innerHTML = '';
-    }
+        // Move coin upwards
+        setTimeout(() => {
+            coin.style.bottom = `${gameContainer.offsetHeight - 30}px`;
+        }, 100);
 
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
+        // Remove coin after animation ends
+        coin.addEventListener('transitionend', () => {
+            if (coin.parentElement) {
+                coin.parentElement.removeChild(coin);
+            }
+        });
 
-    function createMemoryGrid() {
-        const memoryGrid = document.getElementById('memoryGrid');
+        // Check for collision with player
+        coin.addEventListener('transitionend', () => {
+            const playerRect = player.getBoundingClientRect();
+            const coinRect = coin.getBoundingClientRect();
 
-        cards.forEach(card => {
-            const cardElement = document.createElement('div');
-            cardElement.classList.add('memory-card');
-            cardElement.dataset.value = card;
-            cardElement.textContent = card;
-            cardElement.addEventListener('click', flipCard);
-            memoryGrid.appendChild(cardElement);
+            if (playerRect.left < coinRect.right &&
+                playerRect.right > coinRect.left &&
+                playerRect.bottom > coinRect.top &&
+                playerRect.top < coinRect.bottom) {
+                coin.style.display = 'none'; // Hide coin
+                score++;
+                updateScore();
+            }
         });
     }
 
-    function flipCard() {
-        if (lockBoard) return;
-        if (this === firstCard) return;
-
-        this.classList.add('active');
-
-        if (!firstCard) {
-            firstCard = this;
-            flippedCards.push(firstCard);
-            return;
-        }
-
-        secondCard = this;
-        flippedCards.push(secondCard);
-
-        checkForMatch();
+    function updateScore() {
+        document.getElementById('score').textContent = `Score: ${score}`;
     }
 
-    function checkForMatch() {
-        let isMatch = firstCard.dataset.value === secondCard.dataset.value;
-
-        if (isMatch) {
-            disableCards();
-            matchedCards.push(firstCard, secondCard);
-        } else {
-            unflipCards();
-        }
-
-        resetBoard();
-        checkGameEnd();
-    }
-
-    function disableCards() {
-        firstCard.removeEventListener('click', flipCard);
-        secondCard.removeEventListener('click', flipCard);
-        firstCard.classList.add('matched');
-        secondCard.classList.add('matched');
-    }
-
-    function unflipCards() {
-        lockBoard = true;
-
+    function jump() {
+        player.style.bottom = '150px'; // Jump height
         setTimeout(() => {
-            firstCard.classList.remove('active');
-            secondCard.classList.remove('active');
-            lockBoard = false;
-        }, 1000);
+            player.style.bottom = '0';
+        }, 300); // Jump duration
     }
 
-    function resetBoard() {
-        firstCard = null;
-        secondCard = null;
-        lockBoard = false;
-    }
-
-    function checkGameEnd() {
-        if (matchedCards.length === cards.length) {
-            setTimeout(() => {
-                alert('Congratulations! You won the game.');
-                resetGame();
-            }, 500);
+    document.addEventListener('keydown', (event) => {
+        if (event.key === ' ' || event.key === 'ArrowUp') {
+            jump();
         }
-    }
+    });
+
+    setInterval(createCoin, 2000); // Create a new coin every 2 seconds
 </script>
 
 </body>
