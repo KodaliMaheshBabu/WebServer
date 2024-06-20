@@ -3,108 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook-like Page</title>
+    <title>Guess the Number Game</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            text-align: center;
             background-color: #f0f2f5;
             margin: 0;
             padding: 0;
         }
-        .header {
-            background-color: #3b5998;
-            color: #fff;
-            padding: 10px 20px;
-            text-align: center;
-            font-size: 24px;
-        }
-        .navbar {
-            background-color: #3b5998;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
-        .navbar a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-            font-size: 18px;
-        }
-        .navbar a:hover {
-            text-decoration: underline;
-        }
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 20px auto;
+            padding: 20px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            padding: 20px;
         }
-        .profile {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid #ddd;
+        h1, p {
+            margin-bottom: 20px;
         }
-        .profile img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-right: 20px;
+        input[type="number"], button {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px;
         }
-        .profile h2 {
-            margin: 0;
+        button {
+            background-color: #3b5998;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #2a4887;
+        }
+        #result {
             font-size: 24px;
-        }
-        .post {
-            padding: 20px;
-            border-bottom: 1px solid #ddd;
-        }
-        .post p {
-            margin: 10px 0;
-        }
-        .post img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 10px;
+            font-weight: bold;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-<div class="header">
-    Facebook-like Page
-</div>
-
-<div class="navbar">
-    <a href="#">Home</a>
-    <a href="#">Profile</a>
-    <a href="#">Friends</a>
-    <a href="#">Messages</a>
-    <a href="#">Notifications</a>
-</div>
-
 <div class="container">
-    <div class="profile">
-        <img src="https://via.placeholder.com/80" alt="Profile Picture">
-        <div>
-            <h2>John Doe</h2>
-            <p>Software Engineer at Example Company</p>
-        </div>
-    </div>
-
-    <div class="post">
-        <p><strong>John Doe</strong> posted:</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis libero ac ex interdum, sed eleifend orci rutrum.</p>
-        <img src="https://via.placeholder.com/600x400" alt="Post Image">
-    </div>
-
-    <div class="post">
-        <p><strong>Jane Smith</strong> shared:</p>
-        <p>Check out this cool article: <a href="#">Example Article Title</a></p>
-    </div>
+    <h1>Guess the Number Game</h1>
+    <p>Guess a number between 1 and 100:</p>
+    <input type="number" id="guess" min="1" max="100" required>
+    <button onclick="checkGuess()">Check</button>
+    <p id="result"></p>
 </div>
+
+<script>
+    // Generate a random number between 1 and 100
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
+    console.log(randomNumber); // For testing purposes
+    
+    let attempts = 10; // Number of attempts allowed
+    
+    function checkGuess() {
+        const guess = parseInt(document.getElementById('guess').value);
+        const result = document.getElementById('result');
+        
+        if (isNaN(guess) || guess < 1 || guess > 100) {
+            result.textContent = "Please enter a valid number between 1 and 100.";
+        } else {
+            attempts--;
+            if (guess === randomNumber) {
+                result.textContent = `Congratulations! You guessed the number ${randomNumber} correctly in ${10 - attempts} attempts.`;
+                disableInputAndButton();
+            } else if (guess < randomNumber) {
+                result.textContent = `Try a higher number. You have ${attempts} attempts left.`;
+            } else {
+                result.textContent = `Try a lower number. You have ${attempts} attempts left.`;
+            }
+            
+            if (attempts === 0) {
+                result.textContent = `Game over! The number was ${randomNumber}.`;
+                disableInputAndButton();
+            }
+        }
+    }
+    
+    function disableInputAndButton() {
+        document.getElementById('guess').disabled = true;
+        document.querySelector('button').disabled = true;
+    }
+</script>
 
 </body>
 </html>
